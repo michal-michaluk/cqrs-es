@@ -1,0 +1,43 @@
+spring.application.name: station-configuration
+
+spring.kafka.consumer:
+  group-id: station-configuration-default
+  auto-offset-reset: earliest
+
+management:
+  metrics.export.prometheus.enabled: true
+  endpoint.env.enabled: true
+  endpoints.web.exposure.include: "health,info,env,prometheus"
+  metrics.tags.application: station_configuration
+
+logging.config: "classpath:log4jconfig/log4j2.xml"
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 15
+  jpa:
+    hibernate.ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
+
+server:
+  shutdown: graceful
+  error:
+    include-message: always
+
+features:
+  images:
+    thumbnail:
+      height: 100
+      width: 100
+    sizeLimitInMb: 2
+
+station:
+  photo:
+    sizeLimitInMb: 30
+
+location:
+  google.maps.autocomplete.url: https://maps.googleapis.com/maps/api/place/autocomplete/json
+  google.maps.geocode.url:      https://maps.googleapis.com/maps/api/geocode/json
+  google.maps.api.key: AIzaSyDwmdKaSAfomiufOdIZ9Fyyd3gZbiFCYCs

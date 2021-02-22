@@ -1,0 +1,30 @@
+logging.config: "classpath:log4jconfig/log4j2-tst.xml"
+
+spring:
+  kafka:
+    bootstrap-servers: broker1.tst.kafka.emobility:9092,broker2.tst.kafka.emobility:9092,broker3.tst.kafka.emobility:9092
+  datasource:
+    url: jdbc:postgresql://station-configuration-postgresql-dev-tst.postgres.database.azure.com:5432/station_configuration_tst
+    username: drq6k5orrd@station-configuration-postgresql-dev-tst
+    password: 29O8VerLW5
+  azure:
+    blob:
+      store:
+        DefaultEndpointsProtocol: https://stationconfigurationdev.blob.core.windows.net/media/
+        connectionString: "DefaultEndpointsProtocol=https;AccountName=stationconfigurationdev;AccountKey=i3649cngze4CzP/6+ZOEcKw+tCtmVDyv5NgPje+jt8zVg1PS9Z5uBBfOyycfcqUicOcM+vvpCM3Z7irojnKYUQ==;EndpointSuffix=core.windows.net"
+        containerName: "media"
+
+swagger:
+  baseUrl: emobility-cloud-tst.vattenfall.com
+  basePath: station-configuration-tst
+
+emobility:
+  url: http://backend.old-platform/backend/external-ws/mvc
+  username: prometheus_user
+  password: Wakx4betk_b3
+
+features:
+  catalogue:
+    default:
+      image:
+        id: bbfc39f3-690b-4713-beb5-0107706df879

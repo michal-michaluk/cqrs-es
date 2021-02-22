@@ -1,0 +1,128 @@
+plugins {
+    id "org.springframework.boot" version "2.3.4.RELEASE"
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    id "java"
+    id "au.com.dius.pact" version "4.1.7"
+}
+
+group = "com.vattenfall.emobility"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "1.11"
+targetCompatibility = "1.11"
+
+def artifactsEnvAccessToken = System.getenv("AZURE_ARTIFACTS_ENV_ACCESS_TOKEN")
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+	maven {
+		url = uri("https://vfitonlineplatform.pkgs.visualstudio.com/_packaging/eMobility-inCharge/maven/v1")
+		name = "eMobility-inCharge"
+		credentials {
+			username = "AZURE_ARTIFACTS"
+			password = artifactsEnvAccessToken ?: artifactsAccessToken
+		}
+	}
+}
+
+ext {
+    set("azureVersion", "2.1.6")
+}
+
+dependencies {
+    //Spring
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.kafka:spring-kafka"
+    implementation "io.micrometer:micrometer-core:1.5.5"
+	implementation "de.vattenfall.emobility:inCharge-token-spring-boot-starter:1.4.0"
+	implementation "org.springframework.boot:spring-boot-starter-security"
+
+    // newer version (42.2.16) still have an bug that makes connecting to postgres not possible
+    runtimeOnly "org.postgresql:postgresql:42.2.14"
+
+    //Lombok
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+
+    //Kafka
+    implementation "org.springframework.kafka:spring-kafka"
+    implementation "org.apache.kafka:kafka-streams"
+
+    //Azure
+    implementation "com.microsoft.azure:azure-keyvault-secrets-spring-boot-starter"
+    implementation "com.microsoft.azure:azure-spring-boot-starter"
+    implementation "com.azure:azure-storage-blob:12.8.0"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    implementation "io.vavr:vavr:0.9.3"
+
+    // Azure AI
+    implementation("com.microsoft.azure:applicationinsights-logging-log4j2:2.2.0")
+    implementation("com.microsoft.azure:applicationinsights-spring-boot-starter:1.1.1")
+
+    implementation "io.github.resilience4j:resilience4j-retry:1.4.0"
+    implementation 'com.vladmihalcea:hibernate-types-52:2.9.13'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation "io.micrometer:micrometer-registry-prometheus"
+
+    //Tests
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
+
+    //Swagger
+    implementation("io.swagger:swagger-core:1.5.22")
+    implementation("io.springfox:springfox-swagger2:2.9.2")
+    testImplementation("io.swagger:swagger-parser:1.0.44")
+
+    testImplementation "org.testcontainers:testcontainers:1.15.1"
+    testImplementation "org.testcontainers:kafka:1.15.1"
+    testImplementation "org.testcontainers:postgresql:1.15.1"
+    testImplementation "org.awaitility:awaitility:4.0.1"
+    testImplementation 'au.com.dius.pact.consumer:junit5:4.1.14'
+    testImplementation 'au.com.dius.pact.consumer:java8:4.1.14'
+    testImplementation 'au.com.dius.pact.provider:junit5spring:4.1.14'
+    testImplementation("org.skyscreamer:jsonassert:1.5.0")
+    testImplementation("org.springframework.security:spring-security-test")
+
+    testCompileOnly "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+pact {
+    publish {
+        pactBrokerUrl = 'https://emob-pact.azurewebsites.net'
+    }
+}
+
+configurations {
+    //we exclude spring-boot-starter-logging, so that slf4j can switch to log4j2 (excluding logback-classic is not enough apparently)
+    all {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.microsoft.azure:azure-spring-boot-bom:${azureVersion}"
+    }
+}
+
+compileJava {
+    options.incremental = true
+    options.compilerArgs << "-parameters"
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
+// This prepares an empty dir with our jar for a docker image. Useful for the dockerfile, not to read any unnecessary files into the image
+
+task copyJar(type: Copy) {
+    from bootJar // here it automatically reads jar file produced from bootJar task
+    into "${buildDir}/docker/"
+}
+build.dependsOn copyJar
