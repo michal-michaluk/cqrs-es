@@ -1,0 +1,96 @@
+plugins {
+    id "org.springframework.boot" version "2.3.4.RELEASE"
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    id "java"
+    id "au.com.dius.pact" version "4.1.7"
+}
+
+group = "ddd-by-example"
+version = "0.0.1-SNAPSHOT"
+sourceCompatibility = "1.11"
+targetCompatibility = "1.11"
+
+repositories {
+    mavenCentral()
+    maven { url "https://repo.spring.io/milestone" }
+}
+
+dependencies {
+    //Spring
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.kafka:spring-kafka"
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.springframework.boot:spring-boot-starter-log4j2"
+    implementation "io.micrometer:micrometer-core:1.5.5"
+    implementation "io.micrometer:micrometer-registry-prometheus"
+    implementation "io.github.resilience4j:resilience4j-retry:1.4.0"
+    implementation 'com.vladmihalcea:hibernate-types-52:2.9.13'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.12'
+    implementation "io.vavr:vavr:0.9.3"
+
+    runtimeOnly "org.postgresql:postgresql:42.2.14"
+
+    //Lombok
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
+
+    //Kafka
+    implementation "org.springframework.kafka:spring-kafka"
+    implementation "org.apache.kafka:kafka-streams"
+
+    //Tests
+    testImplementation("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
+
+    //Swagger
+    implementation("io.swagger:swagger-core:1.5.22")
+    implementation("io.springfox:springfox-swagger2:2.9.2")
+    testImplementation("io.swagger:swagger-parser:1.0.44")
+
+    testImplementation "org.testcontainers:testcontainers:1.15.1"
+    testImplementation "org.testcontainers:kafka:1.15.1"
+    testImplementation "org.testcontainers:postgresql:1.15.1"
+    testImplementation "org.awaitility:awaitility:4.0.1"
+    testImplementation 'au.com.dius.pact.consumer:junit5:4.1.14'
+    testImplementation 'au.com.dius.pact.consumer:java8:4.1.14'
+    testImplementation 'au.com.dius.pact.provider:junit5spring:4.1.14'
+    testImplementation("org.skyscreamer:jsonassert:1.5.0")
+    testImplementation("org.springframework.security:spring-security-test")
+
+    testCompileOnly "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+pact {
+    publish {
+        pactBrokerUrl = 'pact.broker.url'
+    }
+}
+
+configurations {
+    //we exclude spring-boot-starter-logging, so that slf4j can switch to log4j2 (excluding logback-classic is not enough apparently)
+    all {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
+    }
+}
+
+compileJava {
+    options.incremental = true
+    options.compilerArgs << "-parameters"
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
+// This prepares an empty dir with our jar for a docker image. Useful for the dockerfile, not to read any unnecessary files into the image
+
+task copyJar(type: Copy) {
+    from bootJar // here it automatically reads jar file produced from bootJar task
+    into "${buildDir}/docker/"
+}
+build.dependsOn copyJar
