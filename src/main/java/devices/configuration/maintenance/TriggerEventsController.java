@@ -1,6 +1,6 @@
 package devices.configuration.maintenance;
 
-import devices.configuration.features.catalogue.StationsRepository;
+import devices.configuration.data.DeviceRepository;
 import devices.configuration.outbox.EventOutbox;
 import devices.configuration.published.StationSnapshot;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequiredArgsConstructor
 class TriggerEventsController {
 
-    private final StationsRepository repository;
+    private final DeviceRepository repository;
     private final EventOutbox outbox;
 
     @PostMapping(value = "/prv/events", params = {"type=StationSnapshot", "stationName"},

@@ -1,6 +1,6 @@
 package devices.configuration.published;
 
-import devices.configuration.features.catalogue.StationsRepository;
+import devices.configuration.data.DeviceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import static devices.configuration.features.catalogue.StationException.stationNotFound;
+import static devices.configuration.data.StationException.stationNotFound;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequiredArgsConstructor
 public class StationsReadModelController {
 
-    private final StationsRepository repository;
+    private final DeviceRepository repository;
 
     @GetMapping(value = "/int/stations", params = "version=latest", produces = APPLICATION_JSON_VALUE)
     Page<StationReadModelV1> getStationsLatest(Pageable pageable) {

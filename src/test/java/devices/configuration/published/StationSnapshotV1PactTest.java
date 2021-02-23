@@ -12,10 +12,10 @@ import au.com.dius.pact.provider.junitsupport.loader.PactBroker;
 import com.google.common.collect.ImmutableMap;
 import devices.configuration.IntegrationTest;
 import devices.configuration.StationsFixture;
-import devices.configuration.features.catalogue.Ownership;
-import devices.configuration.features.catalogue.StationUpdate;
-import devices.configuration.features.catalogue.StationsRepository;
-import devices.configuration.features.catalogue.StationsService;
+import devices.configuration.data.Ownership;
+import devices.configuration.data.UpdateDevice;
+import devices.configuration.data.DeviceRepository;
+import devices.configuration.data.DevicesService;
 import devices.configuration.outbox.OutgoingEventsTestListener;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,9 +40,9 @@ import static devices.configuration.outbox.OutgoingEventsTestListener.event;
 public class StationSnapshotV1PactTest {
 
     @Autowired
-    StationsRepository repository;
+    DeviceRepository repository;
     @Autowired
-    StationsService service;
+    DevicesService service;
     @Autowired
     OutgoingEventsTestListener emitted;
 
@@ -62,7 +62,7 @@ public class StationSnapshotV1PactTest {
     @State("StationSnapshotFromStationConfigurationEvent")
     public void givenStationEFACECQC0032() {
         transactional(() -> repository.findByName(stationName).ifPresent(repository::delete));
-        transactional(() -> repository.save(devices.configuration.features.catalogue.StationsFixture.matchinPactExampleEFACECQC0032()
+        transactional(() -> repository.save(devices.configuration.data.StationsFixture.matchinPactExampleEFACECQC0032()
                 .setName(stationName)
                 .setLcp(null)
         ));
@@ -72,7 +72,7 @@ public class StationSnapshotV1PactTest {
     @PactVerifyProvider("StationSnapshotFromStationConfigurationEvent")
     public MessageAndMetadata verifySnapshotOfEFACECQC0032() {
         transactional(() ->
-                service.updateStation(stationName, new StationUpdate().setOwnership(
+                service.updateDevice(stationName, new UpdateDevice().setOwnership(
                         Ownership.of("InCharge SE", "LCP xxx.xxx")
                 ))
         );

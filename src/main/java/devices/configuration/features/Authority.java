@@ -1,7 +1,7 @@
 package devices.configuration.features;
 
-import devices.configuration.features.catalogue.Ownership;
-import devices.configuration.features.catalogue.StationException;
+import devices.configuration.data.Ownership;
+import devices.configuration.data.StationException;
 import de.vattenfall.emobility.token.EmobilityAuthentication;
 import de.vattenfall.emobility.token.authority.ChargingPointOperatorAuthority;
 import de.vattenfall.emobility.token.authority.LocalChargeProviderAuthority;

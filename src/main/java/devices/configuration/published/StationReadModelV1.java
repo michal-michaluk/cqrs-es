@@ -5,15 +5,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import devices.configuration.features.catalogue.*;
-import devices.configuration.features.catalogue.location.Location;
-import devices.configuration.features.catalogue.location.OpeningHours;
-import devices.configuration.features.catalogue.photo.StationPhoto;
+import devices.configuration.data.*;
+import devices.configuration.data.location.Location;
+import devices.configuration.data.location.OpeningHours;
 import lombok.Builder;
 import lombok.Value;
 
 import java.math.BigDecimal;
-import java.net.URL;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
@@ -34,13 +32,12 @@ public class StationReadModelV1 {
     OpeningTimesSnapshot openingTimes;
     VisibilitySnapshot visibility;
     List<PointSnapshot> points;
-    List<ImagesSnapshot> images;
     @JsonProperty("experimental-validations")
     StationValidation validations;
     @JsonProperty("experimental-settings")
     Settings settings;
 
-    public static StationReadModelV1 from(Station station) {
+    public static StationReadModelV1 from(Device station) {
         return StationReadModelV1.builder()
                 .name(station.getName())
                 .ocppChargePoint(station.getName())
@@ -50,7 +47,6 @@ public class StationReadModelV1 {
                 .openingTimes(OpeningTimesSnapshot.from(station.getOpeningHours()))
                 .visibility(VisibilitySnapshot.from(station.getVisibility()))
                 .points(PointSnapshot.from(station.getConnectors()))
-                .images(ImagesSnapshot.from(station.getPhotos()))
                 .validations(station.validate())
                 .settings(station.getSettings())
                 .build();
@@ -216,18 +212,6 @@ public class StationReadModelV1 {
                             .maxAmperage(new BigDecimal(connector.getAmps()))
                             .maxElectricPower(connector.getPower())
                             .build())
-                    .collect(Collectors.toList());
-        }
-    }
-
-    @Value
-    static class ImagesSnapshot {
-        URL url;
-        String category;
-
-        static List<ImagesSnapshot> from(List<StationPhoto> photos) {
-            return photos.stream()
-                    .map(photo -> new ImagesSnapshot(photo.getUrl(), photo.getCategory().toUpperCase()))
                     .collect(Collectors.toList());
         }
     }
