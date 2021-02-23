@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @IntegrationTest
 @Transactional
-class StationImportConfigurationTest {
+class FeaturesConfigurationRepositoryTest {
 
     @Autowired
     private FeaturesConfigurationRepository repository;

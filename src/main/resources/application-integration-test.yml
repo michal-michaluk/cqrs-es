@@ -3,39 +3,7 @@ spring:
     show-sql: false
     hibernate.ddl-auto: update
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-  azure:
-    blob:
-      store:
-        DefaultEndpointsProtocol: https://stationconfigurationdev.blob.core.windows.net/media/
-        connectionString: "DefaultEndpointsProtocol=https;AccountName=stationconfigurationdev;AccountKey=i3649cngze4CzP/6+ZOEcKw+tCtmVDyv5NgPje+jt8zVg1PS9Z5uBBfOyycfcqUicOcM+vvpCM3Z7irojnKYUQ==;EndpointSuffix=core.windows.net"
-        containerName: "media"
-
-emobility:
-  url: "http://test.com"
-  username: "USERNAME"
-  password: "password"
-
-features:
-  catalogue:
-    default:
-      image:
-        id: d0032c42-07f7-4ed3-9f9a-65218d85c8c1
 
 outbox:
   delay: PT0.1S
   batch: 1000
-
-eggplantOutbox:
-  batch: 10
-  delay: PT0.1S
-
-location:
-  google.maps.geocode.url: https://maps.googleapis.com/maps/api/geocode/json
-  google.maps.api.key: broken-api-key
-
-jwt.token.signing:
-  keystore:
-    location: classpath:jwt/signing.pfx
-    password: foobar
-  key.alias: tokenSigningKey
-

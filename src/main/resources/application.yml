@@ -25,19 +25,3 @@ server:
   shutdown: graceful
   error:
     include-message: always
-
-features:
-  images:
-    thumbnail:
-      height: 100
-      width: 100
-    sizeLimitInMb: 2
-
-station:
-  photo:
-    sizeLimitInMb: 30
-
-location:
-  google.maps.autocomplete.url: https://maps.googleapis.com/maps/api/place/autocomplete/json
-  google.maps.geocode.url:      https://maps.googleapis.com/maps/api/geocode/json
-  google.maps.api.key: AIzaSyDwmdKaSAfomiufOdIZ9Fyyd3gZbiFCYCs
