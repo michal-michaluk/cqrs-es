@@ -1,4 +1,4 @@
-package devices.configuration.communication.iot20;
+package devices.configuration.remote.iot16;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,11 +11,11 @@ import java.time.Instant;
 
 @RestController
 @RequiredArgsConstructor
-class Ocpp20Controller {
+class Ocpp16Controller {
 
     private final Clock clock;
 
-    @PostMapping(path = "/protocols/iot20/bootnotification/{deviceId}",
+    @PostMapping(path = "/protocols/iot16/bootnotification/{deviceId}",
             consumes = "application/json", produces = "application/json")
     BootNotificationResponse handleBootNotification(@PathVariable String deviceId,
                                                     @RequestBody BootNotificationRequest request) {
@@ -24,4 +24,5 @@ class Ocpp20Controller {
                 1800,
                 BootNotificationResponse.Status.Accepted);
     }
+
 }

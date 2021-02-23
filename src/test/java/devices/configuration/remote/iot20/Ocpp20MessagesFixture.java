@@ -1,4 +1,4 @@
-package devices.configuration.communication.iot20;
+package devices.configuration.remote.iot20;
 
 public class Ocpp20MessagesFixture {
 

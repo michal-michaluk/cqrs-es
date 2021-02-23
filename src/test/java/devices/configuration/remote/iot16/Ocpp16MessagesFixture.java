@@ -1,4 +1,4 @@
-package devices.configuration.communication.iot16;
+package devices.configuration.remote.iot16;
 
 public class Ocpp16MessagesFixture {
 

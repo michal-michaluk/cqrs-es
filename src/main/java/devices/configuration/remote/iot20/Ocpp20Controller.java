@@ -1,4 +1,4 @@
-package devices.configuration.communication.iot16;
+package devices.configuration.remote.iot20;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @RestController
 @RequiredArgsConstructor
-class Ocpp16Controller {
+class Ocpp20Controller {
 
     private final Clock clock;
 
@@ -24,5 +24,4 @@ class Ocpp16Controller {
                 1800,
                 BootNotificationResponse.Status.Accepted);
     }
-
 }
