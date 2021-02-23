@@ -1,6 +1,5 @@
 package devices.configuration.data;
 
-import devices.configuration.SecurityFixture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.context.annotation.Lazy;
@@ -16,10 +15,6 @@ public class RequestFixture {
 
     @Autowired
     TestRestTemplate testRestTemplate;
-
-    @Autowired
-    SecurityFixture securityFixture;
-
 
     public ResponseEntity<String> getStations() {
         return testRestTemplate.exchange(
@@ -90,7 +85,6 @@ public class RequestFixture {
 
     private HttpHeaders headersWithJwtToken() {
         HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, securityFixture.operatorToken());
         return headers;
     }
 }

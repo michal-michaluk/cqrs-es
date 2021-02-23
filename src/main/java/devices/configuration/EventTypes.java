@@ -3,7 +3,6 @@ package devices.configuration;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import devices.configuration.outbox.OutboxConfiguration;
-import devices.configuration.published.StationSnapshotV1;
 import lombok.AllArgsConstructor;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
@@ -13,12 +12,10 @@ import java.util.Map;
 @AllArgsConstructor
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = StationSnapshotV1.class, name = "StationSnapshot_v1"),
 })
 public class EventTypes {
 
     final static OutboxConfiguration outbox = OutboxConfiguration.builder()
-            .publish(StationSnapshotV1.class, "station-configuration-station-snapshot-v1", StationSnapshotV1::getStationName)
             .build();
 
     private static Map<Class<?>, Type> mapping;

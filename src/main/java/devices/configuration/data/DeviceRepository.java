@@ -17,9 +17,4 @@ public interface DeviceRepository extends PagingAndSortingRepository<Device, UUI
 
     Page<Device> findByCpoIn(Set<String> cpo, Pageable pageable);
 
-    default void deleteAndEmit(Device station) {
-        save(station.emitDeleted());
-        delete(station);
-    }
-
 }

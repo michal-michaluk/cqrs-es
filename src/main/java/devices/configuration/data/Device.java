@@ -1,10 +1,8 @@
 package devices.configuration.data;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import devices.configuration.DomainEvent;
 import devices.configuration.data.location.Location;
 import devices.configuration.data.location.OpeningHours;
-import devices.configuration.published.StationSnapshot;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.hibernate.annotations.CreationTimestamp;
@@ -86,7 +84,7 @@ public class Device {
     private Settings settings;
 
     @JsonIgnore
-    private transient Collection<DomainEvent> events = new ArrayList<>();
+    private transient Collection<Object> events = new ArrayList<>();
 
     public Device setConnectors(List<Connector> connectors) {
         this.connectors.clear();
@@ -126,14 +124,10 @@ public class Device {
         }
     }
 
-    public Device emitUpdated() {
-        events.addAll(StationSnapshot.updated(this));
-        return this;
+    private void emitUpdated() {
     }
 
-    public Device emitDeleted() {
-        events.addAll(StationSnapshot.deleted(this));
-        return this;
+    private void emitDeleted() {
     }
 
     @JsonIgnore
@@ -160,7 +154,7 @@ public class Device {
     }
 
     @DomainEvents
-    public Collection<DomainEvent> events() {
+    public Collection<Object> events() {
         return events;
     }
 

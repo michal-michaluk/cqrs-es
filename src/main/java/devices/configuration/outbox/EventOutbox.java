@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import devices.configuration.DomainEvent;
 import devices.configuration.EventTypes;
-import devices.configuration.features.toggle.TogglesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,7 +27,6 @@ public class EventOutbox {
     private final OutboxMessageRepository outboxRepository;
     private final KafkaTemplate<String, String> kafka;
     private final OutboxConfiguration configuration;
-    private final TogglesService togglesService;
 
     @Value("${outbox.batch:1000}")
     private int batchSize;
@@ -36,8 +34,7 @@ public class EventOutbox {
     @EventListener
     public OutboxMessage store(DomainEvent event) {
         EventTypes.Type type = EventTypes.of(event);
-        if (configuration.definedFor(event) &&
-                togglesService.isEnabled("Export" + type.getType(), true)) {
+        if (configuration.definedFor(event)) {
             OutboxMessage message = new OutboxMessage(
                     UUID.randomUUID(), Instant.now(clock), type, event
             );
