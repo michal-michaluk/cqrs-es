@@ -11,7 +11,7 @@ import java.time.Instant;
 
 @RestController
 @RequiredArgsConstructor
-class Ocpp20Controller {
+class IoT20Controller {
 
     private final Clock clock;
 
