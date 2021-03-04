@@ -1,5 +1,6 @@
 package devices.configuration.remote
 
+
 import spock.lang.Specification
 import spock.lang.Unroll
 

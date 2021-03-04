@@ -18,6 +18,10 @@ public class IntervalRules {
     List<ProtocolRule> protocolRules;
     Duration def;
 
+    public static IntervalRules defaultRules() {
+        return new IntervalRules(List.of(), List.of(), List.of(), Duration.ofSeconds(1800));
+    }
+
     static IntervalRules.DeviceIdRule deviceId(Duration duration, Set<String> deviceIds) {
         return new IntervalRules.DeviceIdRule(duration, deviceIds);
     }
