@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Specification
 
 import javax.transaction.Transactional
+import java.time.Clock
+import java.time.Instant
 import java.util.function.Supplier
 
 import static devices.configuration.TestTransaction.transactional
@@ -17,9 +19,11 @@ import static devices.configuration.TestTransaction.transactional
 class IntervalRulesRepositoryTest extends Specification {
 
     @Autowired
-    private IntervalRulesRepository repository
+    private IntervalRulesDocumentRepository repository
     @Autowired
     private FeaturesConfigurationRepository db
+    @Autowired
+    private Clock clock
 
     def "Should fetch persisted rules"() {
         given:
@@ -47,7 +51,9 @@ class IntervalRulesRepositoryTest extends Specification {
 
     def currentRules() {
         new FeaturesConfigurationEntity(
-                IntervalRulesRepository.INTERVAL_RULES,
+                UUID.randomUUID(),
+                Instant.now(clock),
+                IntervalRulesDocumentRepository.INTERVAL_RULES,
                 IntervalRulesFixture.specifiedRules()
         )
     }

@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -18,6 +20,8 @@ import javax.persistence.Table;
 @AllArgsConstructor
 public class FeaturesConfigurationEntity {
     @Id
+    private UUID eventId;
+    private Instant time;
     private String name;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")

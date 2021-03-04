@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface FeaturesConfigurationRepository
         extends CrudRepository<FeaturesConfigurationEntity, String> {
-    Optional<FeaturesConfigurationEntity> findByName(String name);
+    Optional<FeaturesConfigurationEntity> findFirst1ByNameOrderByTimeDesc(String name);
 }
 

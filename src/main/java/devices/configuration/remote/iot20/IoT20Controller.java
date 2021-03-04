@@ -1,6 +1,6 @@
 package devices.configuration.remote.iot20;
 
-import devices.configuration.configs.IntervalRulesRepository;
+import devices.configuration.configs.IntervalRulesDocumentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +15,7 @@ import java.time.Instant;
 class IoT20Controller {
 
     private final Clock clock;
-    private final IntervalRulesRepository rules;
+    private final IntervalRulesDocumentRepository rules;
 
     @PostMapping(path = "/protocols/iot20/bootnotification/{deviceId}",
             consumes = "application/json", produces = "application/json")
