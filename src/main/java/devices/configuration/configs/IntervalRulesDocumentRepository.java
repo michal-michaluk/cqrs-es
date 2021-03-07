@@ -1,6 +1,7 @@
 package devices.configuration.configs;
 
 import devices.configuration.remote.IntervalRules;
+import devices.configuration.remote.IntervalRulesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

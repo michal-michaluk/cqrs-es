@@ -4,15 +4,12 @@ import devices.configuration.DomainEvent;
 import devices.configuration.Events;
 import devices.configuration.JsonConfiguration;
 import devices.configuration.NotVersionedTypes;
-import devices.configuration.device.Device;
-import devices.configuration.device.DeviceRepository;
-import devices.configuration.device.Ownership;
+import devices.configuration.device.*;
 import devices.configuration.device.events.DeviceAssigned;
 import devices.configuration.device.events.LocationSpecified;
 import devices.configuration.device.events.OpeningHoursSpecified;
 import devices.configuration.device.events.SettingsChanged;
 import devices.configuration.device.persistence.events.LegacyDomainEvent;
-import devices.configuration.reads.DeviceReadModelRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -34,7 +31,6 @@ public class DeviceEventSourcedRepository implements DeviceRepository {
 
     private final DeviceEntityRepository objects;
     private final DeviceEventRepository events;
-    private final DeviceReadModelRepository readModels;
     private final ApplicationEventPublisher publisher;
     private final Clock clock;
 
@@ -65,7 +61,7 @@ public class DeviceEventSourcedRepository implements DeviceRepository {
                 events.getLast(SettingsChanged.class)
                         .map(SettingsChanged::getSettings)
                         .orElse(Settings.defaultSettings())
-        );
+        ));
     }
 
     @Override
@@ -80,7 +76,7 @@ public class DeviceEventSourcedRepository implements DeviceRepository {
                         TYPES.get(event.getClass()),
                         event))
                 .forEach(this.events::save);
-        events.forEach(event -> publisher.publishEvent(event));
+        events.forEach(publisher::publishEvent);
         publisher.publishEvent(device.toSnapshot());
         events.clear();
     }

@@ -24,7 +24,7 @@ public class Device {
     public void assignTo(Ownership ownership) {
         if (!Objects.equals(this.ownership, ownership)) {
             this.ownership = ownership;
-            return events.add(new DeviceAssigned(deviceId, ownership));
+            events.add(new DeviceAssigned(deviceId, ownership));
         }
     }
 
