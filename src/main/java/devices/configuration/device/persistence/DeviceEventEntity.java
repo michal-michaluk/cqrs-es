@@ -1,6 +1,6 @@
-package devices.configuration.configs;
+package devices.configuration.device.persistence;
 
-import devices.configuration.remote.IntervalRules;
+import devices.configuration.DomainEvent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +15,16 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "features_configuration")
+@Table(name = "device_events")
 @NoArgsConstructor
 @AllArgsConstructor
-public class FeaturesConfigurationEntity {
+public class DeviceEventEntity {
     @Id
-    private UUID id;
+    private UUID eventId;
     private Instant time;
-    private String name;
+    private String deviceId;
+    private String type;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private IntervalRules configuration;
+    private DomainEvent event;
 }
